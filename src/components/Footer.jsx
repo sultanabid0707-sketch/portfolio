@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion'
+﻿import { motion } from 'framer-motion'
 import { FiGithub, FiLinkedin, FiMail, FiHeart } from 'react-icons/fi'
 
 export default function Footer() {
   return (
     <footer className="py-10 border-t border-white/5 relative">
-      <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
         <div className="font-mono text-sm text-slate-500">
           <span className="text-white">&lt;</span>
           <span className="text-primary">Sultan</span>
@@ -29,7 +29,7 @@ export default function Footer() {
               href={href}
               target="_blank"
               rel="noreferrer"
-              whileHover={{ scale: 1.2, color: '#7c3aed' }}
+              whileHover={{ scale: 1.2, color: '#8b5cf6' }}
               className="text-slate-500 hover:text-primary transition-colors"
             >
               <Icon size={16} />

@@ -2,140 +2,78 @@ import { useEffect, useState } from 'react'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 
 export default function CustomCursor() {
-  const mx = useMotionValue(-200)
-  const my = useMotionValue(-200)
-
-  // Dot — instant
-  const dotX = useSpring(mx, { stiffness: 2000, damping: 60 })
-  const dotY = useSpring(my, { stiffness: 2000, damping: 60 })
-
-  // Ring — medium lag
-  const ringX = useSpring(mx, { stiffness: 180, damping: 22 })
-  const ringY = useSpring(my, { stiffness: 180, damping: 22 })
-
-  // Blob — slow drift
-  const blobX = useSpring(mx, { stiffness: 60, damping: 18 })
-  const blobY = useSpring(my, { stiffness: 60, damping: 18 })
-
+  const [visible, setVisible] = useState(false)
   const [hovering, setHovering] = useState(false)
   const [clicking, setClicking] = useState(false)
-  const [label, setLabel] = useState('')
+
+  const mx = useMotionValue(-300)
+  const my = useMotionValue(-300)
+
+  // Dot — near-instant
+  const dotX = useSpring(mx, { stiffness: 3000, damping: 70 })
+  const dotY = useSpring(my, { stiffness: 3000, damping: 70 })
+
+  // Ring — slight lag
+  const ringX = useSpring(mx, { stiffness: 320, damping: 28 })
+  const ringY = useSpring(my, { stiffness: 320, damping: 28 })
 
   useEffect(() => {
-    const onMove = (e) => {
-      mx.set(e.clientX)
-      my.set(e.clientY)
-    }
-    const onDown = () => setClicking(true)
-    const onUp = () => setClicking(false)
+    // Skip on touch devices
+    if (window.matchMedia('(pointer: coarse)').matches) return
 
-    const onOver = (e) => {
-      const el = e.target.closest('a, button, [data-hover]')
-      if (el) {
-        setHovering(true)
-        setLabel(el.dataset.cursorLabel || '')
-      }
-    }
-    const onOut = (e) => {
-      if (e.target.closest('a, button, [data-hover]')) {
-        setHovering(false)
-        setLabel('')
-      }
-    }
+    const move = (e) => { mx.set(e.clientX); my.set(e.clientY); setVisible(true) }
+    const leave = () => setVisible(false)
+    const enter = () => setVisible(true)
+    const down = () => setClicking(true)
+    const up = () => setClicking(false)
+    const over = (e) => { if (e.target.closest('a, button, [data-hover]')) setHovering(true) }
+    const out = (e) => { if (e.target.closest('a, button, [data-hover]')) setHovering(false) }
 
-    window.addEventListener('mousemove', onMove)
-    window.addEventListener('mousedown', onDown)
-    window.addEventListener('mouseup', onUp)
-    window.addEventListener('mouseover', onOver)
-    window.addEventListener('mouseout', onOut)
+    window.addEventListener('mousemove', move)
+    document.documentElement.addEventListener('mouseleave', leave)
+    document.documentElement.addEventListener('mouseenter', enter)
+    window.addEventListener('mousedown', down)
+    window.addEventListener('mouseup', up)
+    window.addEventListener('mouseover', over)
+    window.addEventListener('mouseout', out)
     return () => {
-      window.removeEventListener('mousemove', onMove)
-      window.removeEventListener('mousedown', onDown)
-      window.removeEventListener('mouseup', onUp)
-      window.removeEventListener('mouseover', onOver)
-      window.removeEventListener('mouseout', onOut)
+      window.removeEventListener('mousemove', move)
+      document.documentElement.removeEventListener('mouseleave', leave)
+      document.documentElement.removeEventListener('mouseenter', enter)
+      window.removeEventListener('mousedown', down)
+      window.removeEventListener('mouseup', up)
+      window.removeEventListener('mouseover', over)
+      window.removeEventListener('mouseout', out)
     }
   }, [mx, my])
 
-  return (
-    <>
-      {/* Layer 1 — soft ambient blob */}
-      <motion.div
-        className="fixed pointer-events-none z-[9990] rounded-full"
-        style={{
-          x: blobX,
-          y: blobY,
-          translateX: '-50%',
-          translateY: '-50%',
-          width: hovering ? 120 : 80,
-          height: hovering ? 120 : 80,
-          background: hovering
-            ? 'radial-gradient(circle, #ec489955 0%, transparent 70%)'
-            : 'radial-gradient(circle, #7c3aed33 0%, transparent 70%)',
-          filter: 'blur(20px)',
-          transition: 'width 0.4s ease, height 0.4s ease, background 0.4s ease',
-        }}
-      />
+  if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) return null
 
-      {/* Layer 2 — rotating gradient ring */}
+  return (
+    <motion.div animate={{ opacity: visible ? 1 : 0 }} transition={{ duration: 0.12 }}>
+      {/* Ring */}
       <motion.div
-        className="fixed pointer-events-none z-[9995] rounded-full flex items-center justify-center"
+        className="fixed pointer-events-none z-[9995] rounded-full"
         style={{
           x: ringX,
           y: ringY,
           translateX: '-50%',
           translateY: '-50%',
+          border: `1.5px solid ${hovering ? '#f97316' : '#8b5cf699'}`,
+          boxShadow: hovering
+            ? '0 0 16px #f9731644, inset 0 0 6px #f9731611'
+            : '0 0 8px #8b5cf622',
+          transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
         }}
         animate={{
-          width: clicking ? 24 : hovering ? 56 : 36,
-          height: clicking ? 24 : hovering ? 56 : 36,
-          scale: clicking ? 0.85 : 1,
+          width: clicking ? 16 : hovering ? 42 : 26,
+          height: clicking ? 16 : hovering ? 42 : 26,
+          opacity: clicking ? 0.6 : 0.9,
         }}
-        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-      >
-        {/* Rotating conic gradient border */}
-        <motion.div
-          className="absolute inset-0 rounded-full"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-          style={{
-            background: hovering
-              ? 'conic-gradient(from 0deg, #ec4899, #7c3aed, #06b6d4, #ec4899)'
-              : 'conic-gradient(from 0deg, #7c3aed, #06b6d4, #a78bfa, #7c3aed)',
-            padding: 1.5,
-            borderRadius: '50%',
-          }}
-        >
-          <div
-            className="w-full h-full rounded-full"
-            style={{ background: clicking ? 'transparent' : '#0a0a0f' }}
-          />
-        </motion.div>
+        transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+      />
 
-        {/* Hover label */}
-        {hovering && label && (
-          <motion.span
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative z-10 text-white text-[8px] font-mono font-bold tracking-widest uppercase pointer-events-none"
-          >
-            {label}
-          </motion.span>
-        )}
-
-        {/* Hover arrow */}
-        {hovering && !label && (
-          <motion.span
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative z-10 text-white text-xs pointer-events-none"
-          >
-            →
-          </motion.span>
-        )}
-      </motion.div>
-
-      {/* Layer 3 — precise core dot */}
+      {/* Dot */}
       <motion.div
         className="fixed pointer-events-none z-[9999] rounded-full"
         style={{
@@ -143,16 +81,18 @@ export default function CustomCursor() {
           y: dotY,
           translateX: '-50%',
           translateY: '-50%',
-          background: 'radial-gradient(circle, #ffffff 0%, #06b6d4 60%, #7c3aed 100%)',
-          boxShadow: '0 0 8px #06b6d4, 0 0 16px #7c3aed44',
         }}
         animate={{
-          width: hovering ? 0 : clicking ? 14 : 7,
-          height: hovering ? 0 : clicking ? 14 : 7,
-          opacity: hovering ? 0 : 1,
+          width: clicking ? 7 : hovering ? 3 : 5,
+          height: clicking ? 7 : hovering ? 3 : 5,
+          backgroundColor: hovering ? '#f97316' : '#ffffff',
+          boxShadow: hovering
+            ? '0 0 8px #f97316cc'
+            : '0 0 5px rgba(255,255,255,0.85)',
+          opacity: clicking ? 0.5 : 1,
         }}
-        transition={{ type: 'spring', stiffness: 600, damping: 30 }}
+        transition={{ type: 'spring', stiffness: 800, damping: 32 }}
       />
-    </>
+    </motion.div>
   )
 }

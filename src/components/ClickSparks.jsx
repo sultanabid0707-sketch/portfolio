@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+﻿import { useEffect, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 let uid = 0
@@ -12,7 +12,7 @@ export default function ClickSparks() {
     const particles = Array.from({ length: count }, (_, i) => {
       const angle = (i / count) * Math.PI * 2
       const dist = 40 + Math.random() * 40
-      const colors = ['#7c3aed', '#06b6d4', '#ec4899', '#a78bfa', '#ffffff', '#38bdf8']
+      const colors = ['#8b5cf6', '#14b8a6', '#f97316', '#c4b5fd', '#ffffff', '#5eead4']
       return {
         id: `${id}-${i}`,
         x,

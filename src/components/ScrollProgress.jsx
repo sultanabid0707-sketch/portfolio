@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { motion, useSpring } from 'framer-motion'
 
 export default function ScrollProgress() {
@@ -19,8 +19,8 @@ export default function ScrollProgress() {
       className="fixed top-0 left-0 right-0 h-0.5 z-[60] origin-left"
       style={{
         scaleX: spring / 100,
-        background: 'linear-gradient(90deg, #7c3aed, #06b6d4, #ec4899)',
-        boxShadow: '0 0 8px #7c3aed',
+        background: 'linear-gradient(90deg, #8b5cf6, #14b8a6, #f97316)',
+        boxShadow: '0 0 8px #8b5cf6',
       }}
     />
   )

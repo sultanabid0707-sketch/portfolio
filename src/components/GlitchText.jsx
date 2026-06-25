@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%'
 
@@ -6,7 +6,7 @@ export default function GlitchText({ text, className = '' }) {
   const ref = useRef(null)
   const intervalRef = useRef(null)
 
-  const scramble = () => {
+  const scramble = useCallback(() => {
     let iteration = 0
     clearInterval(intervalRef.current)
     intervalRef.current = setInterval(() => {
@@ -19,29 +19,27 @@ export default function GlitchText({ text, className = '' }) {
           return CHARS[Math.floor(Math.random() * CHARS.length)]
         })
         .join('')
-      iteration += 0.5
+      iteration += 0.6
       if (iteration >= text.length) {
         clearInterval(intervalRef.current)
-        ref.current.innerText = text
+        if (ref.current) ref.current.innerText = text
       }
-    }, 30)
-  }
+    }, 35)
+  }, [text])
 
   useEffect(() => {
-    // Auto-scramble once on mount
-    const t = setTimeout(scramble, 400)
+    const t = setTimeout(scramble, 600)
     return () => {
       clearTimeout(t)
       clearInterval(intervalRef.current)
     }
-  }, [text])
+  }, [scramble])
 
   return (
     <span
       ref={ref}
       className={className}
       onMouseEnter={scramble}
-      style={{ fontVariantNumeric: 'tabular-nums' }}
     >
       {text}
     </span>

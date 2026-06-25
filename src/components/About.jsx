@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+﻿import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { FiCode, FiLayers, FiZap, FiAward } from 'react-icons/fi'
 
@@ -30,25 +30,25 @@ const timeline = [
     year: '2021',
     title: 'Started the Journey',
     desc: 'Began learning HTML, CSS, and JavaScript. Built first static websites.',
-    color: '#7c3aed',
+    color: '#8b5cf6',
   },
   {
     year: '2022',
     title: 'Dived into React',
     desc: 'Mastered React hooks, state management, and component architecture.',
-    color: '#06b6d4',
+    color: '#14b8a6',
   },
   {
     year: '2023',
     title: 'Full-Stack Growth',
     desc: 'Learned Node.js, Express, MongoDB. Built RESTful APIs and integrated Stripe payments.',
-    color: '#ec4899',
+    color: '#f97316',
   },
   {
     year: '2024',
     title: 'Advanced Development',
     desc: 'Worked on real-world projects including a restaurant management platform.',
-    color: '#a78bfa',
+    color: '#c4b5fd',
   },
 ]
 
@@ -67,7 +67,7 @@ export default function About() {
 
   return (
     <section id="about" className="py-24 relative">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <motion.div
           ref={ref}
           variants={container}
@@ -82,7 +82,7 @@ export default function About() {
             </h2>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-16">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
             {/* Left — bio */}
             <div className="space-y-6">
               <motion.p variants={fadeUp} className="text-slate-300 text-lg leading-relaxed">

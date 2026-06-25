@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FiArrowUp } from 'react-icons/fi'
 
@@ -18,13 +18,13 @@ export default function BackToTop() {
           initial={{ opacity: 0, scale: 0.5, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
-          whileHover={{ scale: 1.1, boxShadow: '0 0 24px #7c3aed88' }}
+          whileHover={{ scale: 1.1, boxShadow: '0 0 24px #8b5cf688' }}
           whileTap={{ scale: 0.9 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full flex items-center justify-center text-white"
           style={{
-            background: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
-            boxShadow: '0 0 16px #7c3aed55',
+            background: 'linear-gradient(135deg, #8b5cf6, #14b8a6)',
+            boxShadow: '0 0 16px #8b5cf655',
           }}
           data-hover
           data-cursor-label="TOP"

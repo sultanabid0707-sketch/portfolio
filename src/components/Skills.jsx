@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+﻿import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const categories = [
@@ -37,7 +37,7 @@ const categories = [
   },
   {
     name: 'Tools & Workflow',
-    color: '#f59e0b',
+    color: '#8b5cf6',
     skills: [
       { name: 'Git / GitHub', level: 92 },
       { name: 'VS Code', level: 95 },
@@ -67,7 +67,7 @@ function SkillBar({ name, level, color, index, inView }) {
           initial={{ width: 0 }}
           animate={inView ? { width: `${level}%` } : { width: 0 }}
           transition={{ duration: 1.2, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-          style={{ background: `linear-gradient(90deg, ${color}, #06b6d4)` }}
+          style={{ background: `linear-gradient(90deg, ${color}, #14b8a6)` }}
         />
       </div>
     </div>
@@ -80,7 +80,7 @@ export default function Skills() {
 
   return (
     <section id="skills" className="py-24 relative">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}

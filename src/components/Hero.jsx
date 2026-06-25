@@ -1,7 +1,8 @@
-import { useEffect, useState, Suspense, lazy } from 'react'
+﻿import { useEffect, useState, Suspense, lazy } from 'react'
 import { motion } from 'framer-motion'
 import { FiArrowDown, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
 import GlitchText from './GlitchText'
+import { useMagnetic } from '../hooks/useMagnetic'
 
 const TechCube = lazy(() => import('./TechCube'))
 
@@ -62,12 +63,28 @@ const item = {
 }
 
 export default function Hero() {
+  const mag1 = useMagnetic(0.4)
+  const mag2 = useMagnetic(0.4)
+
   return (
     <section
       id="home"
       className="relative min-h-screen flex items-center pt-20 overflow-hidden"
     >
-      <div className="max-w-6xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-12 items-center py-20">
+      {/* Animated hero background glow */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        animate={{
+          background: [
+            'radial-gradient(ellipse 80% 60% at 20% 50%, #8b5cf618 0%, transparent 60%)',
+            'radial-gradient(ellipse 80% 60% at 25% 45%, #14b8a628 0%, transparent 60%)',
+            'radial-gradient(ellipse 80% 60% at 18% 55%, #f9731618 0%, transparent 60%)',
+            'radial-gradient(ellipse 80% 60% at 20% 50%, #8b5cf618 0%, transparent 60%)',
+          ],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 w-full grid lg:grid-cols-2 gap-8 lg:gap-12 items-center py-16 lg:py-20">
         {/* Left — text */}
         <motion.div
           variants={container}
@@ -80,14 +97,12 @@ export default function Hero() {
             Available for work
           </motion.div>
 
-          <motion.h1 variants={item} className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight">
-            <span className="text-white">Hi, I'm </span>
+          <motion.h1 variants={item} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight">
+            <span className="text-white block mb-1">Hi, I'm</span>
             <GlitchText
-              text="Sultan"
-              className="glow-text bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent cursor-pointer"
+              text="Sultan Mohyuddin"
+              className="glow-text bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent cursor-pointer block"
             />
-            <br />
-            <span className="text-white">Mohyuddin</span>
           </motion.h1>
 
           <motion.h2 variants={item} className="text-xl md:text-2xl text-slate-400 font-light h-8">
@@ -100,25 +115,29 @@ export default function Hero() {
             something extraordinary.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons — magnetic */}
           <motion.div variants={item} className="flex flex-wrap gap-4">
-            <motion.button
-              whileHover={{ scale: 1.04, boxShadow: '0 0 30px #7c3aed66' }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-primary to-secondary"
-              style={{ boxShadow: '0 0 20px #7c3aed44' }}
-            >
-              View My Work
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.04, borderColor: '#7c3aed', color: '#fff' }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              className="px-8 py-3.5 rounded-xl font-semibold text-slate-300 border border-slate-600 hover:border-primary transition-colors"
-            >
-              Get In Touch
-            </motion.button>
+            <div ref={mag1.ref} onMouseMove={mag1.onMouseMove} onMouseLeave={mag1.onMouseLeave} className="inline-block">
+              <motion.button
+                whileHover={{ boxShadow: '0 0 30px #8b5cf666' }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-8 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-primary to-secondary"
+                style={{ boxShadow: '0 0 20px #8b5cf644' }}
+              >
+                View My Work
+              </motion.button>
+            </div>
+            <div ref={mag2.ref} onMouseMove={mag2.onMouseMove} onMouseLeave={mag2.onMouseLeave} className="inline-block">
+              <motion.button
+                whileHover={{ borderColor: '#8b5cf6', color: '#fff' }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-8 py-3.5 rounded-xl font-semibold text-slate-300 border border-slate-600 hover:border-primary transition-colors"
+              >
+                Get In Touch
+              </motion.button>
+            </div>
           </motion.div>
 
           {/* Socials */}
@@ -130,7 +149,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                whileHover={{ scale: 1.15, y: -3, color: '#7c3aed' }}
+                whileHover={{ scale: 1.15, y: -3, color: '#8b5cf6' }}
                 whileTap={{ scale: 0.9 }}
                 className="text-slate-500 hover:text-primary transition-colors text-xl"
               >
@@ -147,12 +166,12 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="relative h-[420px] lg:h-[500px] z-10"
+          className="relative h-[300px] sm:h-[380px] lg:h-[500px] z-10"
         >
           {/* Glow ring behind cube */}
           <div className="absolute inset-0 rounded-full"
             style={{
-              background: 'radial-gradient(ellipse at center, #7c3aed22 0%, transparent 70%)',
+              background: 'radial-gradient(ellipse at center, #8b5cf622 0%, transparent 70%)',
               filter: 'blur(30px)',
             }}
           />
@@ -164,7 +183,7 @@ export default function Hero() {
             <TechCube />
           </Suspense>
 
-          {/* Floating badge labels */}
+          {/* Floating badge labels — hidden on mobile to avoid overflow */}
           {[
             { label: 'React', color: '#61dafb', pos: 'top-6 right-6' },
             { label: 'Node.js', color: '#68a063', pos: 'bottom-12 right-0' },
@@ -172,7 +191,7 @@ export default function Hero() {
           ].map(({ label, color, pos }) => (
             <motion.div
               key={label}
-              className={`absolute ${pos} px-3 py-1.5 rounded-full text-xs font-mono font-semibold`}
+              className={`hidden sm:block absolute ${pos} px-3 py-1.5 rounded-full text-xs font-mono font-semibold`}
               style={{
                 background: `${color}22`,
                 border: `1px solid ${color}55`,

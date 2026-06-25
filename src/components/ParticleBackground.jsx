@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+﻿import { useMemo } from 'react'
 
 const PARTICLE_COUNT = 28
 
@@ -11,7 +11,7 @@ export default function ParticleBackground() {
       size: Math.random() * 3 + 1,
       duration: Math.random() * 12 + 8,
       delay: Math.random() * -15,
-      color: ['#7c3aed', '#06b6d4', '#ec4899', '#a78bfa', '#22d3ee'][
+      color: ['#8b5cf6', '#14b8a6', '#f97316', '#c4b5fd', '#22d3ee'][
         Math.floor(Math.random() * 5)
       ],
     })),
@@ -23,7 +23,7 @@ export default function ParticleBackground() {
       <div
         className="absolute w-[600px] h-[600px] rounded-full opacity-10 blur-[120px]"
         style={{
-          background: 'radial-gradient(circle, #7c3aed, transparent)',
+          background: 'radial-gradient(circle, #8b5cf6, transparent)',
           top: '-10%',
           left: '-10%',
         }}
@@ -31,7 +31,7 @@ export default function ParticleBackground() {
       <div
         className="absolute w-[500px] h-[500px] rounded-full opacity-8 blur-[100px]"
         style={{
-          background: 'radial-gradient(circle, #06b6d4, transparent)',
+          background: 'radial-gradient(circle, #14b8a6, transparent)',
           bottom: '10%',
           right: '-5%',
         }}
@@ -39,7 +39,7 @@ export default function ParticleBackground() {
       <div
         className="absolute w-[400px] h-[400px] rounded-full opacity-6 blur-[90px]"
         style={{
-          background: 'radial-gradient(circle, #ec4899, transparent)',
+          background: 'radial-gradient(circle, #f97316, transparent)',
           top: '40%',
           left: '40%',
         }}
@@ -67,7 +67,7 @@ export default function ParticleBackground() {
         className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage:
-            'linear-gradient(#7c3aed 1px, transparent 1px), linear-gradient(90deg, #7c3aed 1px, transparent 1px)',
+            'linear-gradient(#8b5cf6 1px, transparent 1px), linear-gradient(90deg, #8b5cf6 1px, transparent 1px)',
           backgroundSize: '80px 80px',
         }}
       />

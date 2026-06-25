@@ -1,8 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Theme variables ── */
+:root {
+  --bg-dark: #0a0a0f;
+  --bg-surface: #111118;
+  --bg-card: #16161f;
+  --text-body: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border-subtle: rgba(255,255,255,0.05);
+}
 
 * {
   margin: 0;
@@ -13,7 +23,7 @@
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: #7c3aed #0a0a0f;
+  scrollbar-color: #8b5cf6 var(--bg-dark);
 }
 
 ::-webkit-scrollbar {
@@ -23,7 +33,7 @@ html {
   background: #0a0a0f;
 }
 ::-webkit-scrollbar-thumb {
-  background: #7c3aed;
+  background: #8b5cf6;
   border-radius: 3px;
 }
 
@@ -32,7 +42,10 @@ body {
   color: #e2e8f0;
   font-family: 'Inter', system-ui, sans-serif;
   overflow-x: hidden;
-  cursor: none;
+}
+
+@media (pointer: fine) {
+  body, a, button, [data-hover] { cursor: none !important; }
 }
 
 /* 3D Card flip */
@@ -63,10 +76,10 @@ body {
 
 /* Glow text */
 .glow-text {
-  text-shadow: 0 0 20px #7c3aed, 0 0 40px #7c3aed66;
+  text-shadow: 0 0 20px #8b5cf6, 0 0 40px #8b5cf666;
 }
 .glow-text-cyan {
-  text-shadow: 0 0 20px #06b6d4, 0 0 40px #06b6d466;
+  text-shadow: 0 0 20px #14b8a6, 0 0 40px #14b8a666;
 }
 
 /* Gradient border */
@@ -80,7 +93,7 @@ body {
   position: absolute;
   inset: -1px;
   border-radius: 1rem;
-  background: linear-gradient(135deg, #7c3aed, #06b6d4, #ec4899);
+  background: linear-gradient(135deg, #8b5cf6, #14b8a6, #f97316);
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s;
@@ -99,7 +112,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  background: linear-gradient(135deg, #8b5cf6, #14b8a6);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -134,13 +147,13 @@ body {
   left: 0;
   width: 60%;
   height: 3px;
-  background: linear-gradient(90deg, #7c3aed, #06b6d4);
+  background: linear-gradient(90deg, #8b5cf6, #14b8a6);
   border-radius: 2px;
 }
 
 /* Skill bar */
 .skill-bar-fill {
-  background: linear-gradient(90deg, #7c3aed, #06b6d4, #ec4899);
+  background: linear-gradient(90deg, #8b5cf6, #14b8a6, #f97316);
   background-size: 200% 100%;
   animation: skillBarShift 3s linear infinite;
 }

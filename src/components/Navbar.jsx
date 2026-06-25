@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const links = ['Home', 'About', 'Projects', 'Skills', 'Contact']
+const links = ['Home', 'About', 'Projects', 'Skills', 'Testimonials', 'Contact']
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState('Home')
   const [mobileOpen, setMobileOpen] = useState(false)
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', onScroll)
@@ -39,11 +38,9 @@ export default function Navbar() {
           className="text-xl font-bold font-mono cursor-pointer"
           onClick={() => handleNav('Home')}
         >
-          <span className="text-white">&lt;</span>
           <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Sultan
+            Sultan Mohyuddin
           </span>
-          <span className="text-white"> /&gt;</span>
         </motion.div>
 
         {/* Desktop Links */}
@@ -69,7 +66,7 @@ export default function Navbar() {
             </motion.button>
           ))}
           <motion.a
-            whileHover={{ scale: 1.05, boxShadow: '0 0 20px #7c3aed88' }}
+            whileHover={{ scale: 1.05, boxShadow: '0 0 20px #8b5cf688' }}
             whileTap={{ scale: 0.95 }}
             href="/Sultan_Mohyuddin_Professional_CV.pdf"
             target="_blank"
@@ -78,6 +75,7 @@ export default function Navbar() {
           >
             Resume
           </motion.a>
+
         </div>
 
         {/* Mobile hamburger */}

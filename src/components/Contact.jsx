@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+﻿import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { FiMail, FiGithub, FiLinkedin, FiSend, FiMapPin, FiCheck } from 'react-icons/fi'
 
@@ -8,7 +8,7 @@ const contactLinks = [
     label: 'Email',
     value: 'sultanabid0707@gmail.com',
     href: 'mailto:sultanabid0707@gmail.com',
-    color: '#ec4899',
+    color: '#f97316',
   },
   {
     icon: FiGithub,
@@ -29,7 +29,7 @@ const contactLinks = [
     label: 'Location',
     value: 'Pakistan',
     href: null,
-    color: '#7c3aed',
+    color: '#8b5cf6',
   },
 ]
 
@@ -57,7 +57,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-24 relative">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
@@ -182,13 +182,13 @@ export default function Contact() {
             <motion.button
               type="submit"
               disabled={sending || sent}
-              whileHover={{ scale: 1.02, boxShadow: '0 0 25px #7c3aed66' }}
+              whileHover={{ scale: 1.02, boxShadow: '0 0 25px #8b5cf666' }}
               whileTap={{ scale: 0.98 }}
               className="w-full py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2 transition-all disabled:opacity-70"
               style={{
                 background: sent
                   ? 'linear-gradient(135deg, #10b981, #059669)'
-                  : 'linear-gradient(135deg, #7c3aed, #06b6d4)',
+                  : 'linear-gradient(135deg, #8b5cf6, #14b8a6)',
               }}
             >
               {sent ? (
