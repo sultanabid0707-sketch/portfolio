@@ -1,13 +1,29 @@
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { FiCode, FiLayers, FiZap, FiAward } from 'react-icons/fi'
 
 const stats = [
-  { label: 'Projects Built', value: '15+', icon: FiLayers },
-  { label: 'Technologies', value: '12+', icon: FiCode },
-  { label: 'Years Learning', value: '3+', icon: FiZap },
-  { label: 'Certifications', value: '5+', icon: FiAward },
+  { label: 'Projects Built', value: 15, suffix: '+', icon: FiLayers },
+  { label: 'Technologies', value: 12, suffix: '+', icon: FiCode },
+  { label: 'Years Learning', value: 3, suffix: '+', icon: FiZap },
+  { label: 'Certifications', value: 5, suffix: '+', icon: FiAward },
 ]
+
+function AnimatedCounter({ target, suffix, inView }) {
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    if (!inView) return
+    let start = 0
+    const step = Math.ceil(target / 40)
+    const timer = setInterval(() => {
+      start += step
+      if (start >= target) { setCount(target); clearInterval(timer) }
+      else setCount(start)
+    }, 40)
+    return () => clearInterval(timer)
+  }, [inView, target])
+  return <>{count}{suffix}</>
+}
 
 const timeline = [
   {
@@ -88,7 +104,7 @@ export default function About() {
 
               {/* Stats */}
               <motion.div variants={fadeUp} className="grid grid-cols-2 gap-4 pt-4">
-                {stats.map(({ label, value, icon: Icon }) => (
+                {stats.map(({ label, value, suffix, icon: Icon }) => (
                   <div
                     key={label}
                     className="gradient-border p-4 rounded-xl flex items-center gap-3 group"
@@ -97,7 +113,9 @@ export default function About() {
                       <Icon className="text-primary text-lg" />
                     </div>
                     <div>
-                      <div className="text-2xl font-black text-white">{value}</div>
+                      <div className="text-2xl font-black text-white">
+                        <AnimatedCounter target={value} suffix={suffix} inView={inView} />
+                      </div>
                       <div className="text-xs text-slate-500">{label}</div>
                     </div>
                   </div>

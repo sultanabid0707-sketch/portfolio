@@ -1,78 +1,157 @@
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 
 export default function CustomCursor() {
-  const [pos, setPos] = useState({ x: -100, y: -100 })
-  const [trailPos, setTrailPos] = useState({ x: -100, y: -100 })
-  const [clicking, setClicking] = useState(false)
+  const mx = useMotionValue(-200)
+  const my = useMotionValue(-200)
+
+  // Dot — instant
+  const dotX = useSpring(mx, { stiffness: 2000, damping: 60 })
+  const dotY = useSpring(my, { stiffness: 2000, damping: 60 })
+
+  // Ring — medium lag
+  const ringX = useSpring(mx, { stiffness: 180, damping: 22 })
+  const ringY = useSpring(my, { stiffness: 180, damping: 22 })
+
+  // Blob — slow drift
+  const blobX = useSpring(mx, { stiffness: 60, damping: 18 })
+  const blobY = useSpring(my, { stiffness: 60, damping: 18 })
+
   const [hovering, setHovering] = useState(false)
+  const [clicking, setClicking] = useState(false)
+  const [label, setLabel] = useState('')
 
   useEffect(() => {
-    const move = (e) => {
-      setPos({ x: e.clientX, y: e.clientY })
-      setTimeout(() => setTrailPos({ x: e.clientX, y: e.clientY }), 80)
+    const onMove = (e) => {
+      mx.set(e.clientX)
+      my.set(e.clientY)
     }
-    const down = () => setClicking(true)
-    const up = () => setClicking(false)
+    const onDown = () => setClicking(true)
+    const onUp = () => setClicking(false)
 
-    const enterLink = (e) => {
-      if (e.target.closest('a, button, [data-hover]')) setHovering(true)
+    const onOver = (e) => {
+      const el = e.target.closest('a, button, [data-hover]')
+      if (el) {
+        setHovering(true)
+        setLabel(el.dataset.cursorLabel || '')
+      }
     }
-    const leaveLink = (e) => {
-      if (e.target.closest('a, button, [data-hover]')) setHovering(false)
+    const onOut = (e) => {
+      if (e.target.closest('a, button, [data-hover]')) {
+        setHovering(false)
+        setLabel('')
+      }
     }
 
-    window.addEventListener('mousemove', move)
-    window.addEventListener('mousedown', down)
-    window.addEventListener('mouseup', up)
-    window.addEventListener('mouseover', enterLink)
-    window.addEventListener('mouseout', leaveLink)
-
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mousedown', onDown)
+    window.addEventListener('mouseup', onUp)
+    window.addEventListener('mouseover', onOver)
+    window.addEventListener('mouseout', onOut)
     return () => {
-      window.removeEventListener('mousemove', move)
-      window.removeEventListener('mousedown', down)
-      window.removeEventListener('mouseup', up)
-      window.removeEventListener('mouseover', enterLink)
-      window.removeEventListener('mouseout', leaveLink)
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mousedown', onDown)
+      window.removeEventListener('mouseup', onUp)
+      window.removeEventListener('mouseover', onOver)
+      window.removeEventListener('mouseout', onOut)
     }
-  }, [])
+  }, [mx, my])
 
   return (
     <>
-      {/* Trail dot */}
+      {/* Layer 1 — soft ambient blob */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9998] rounded-full mix-blend-screen"
-        animate={{
-          x: trailPos.x - 20,
-          y: trailPos.y - 20,
-          scale: hovering ? 1.8 : clicking ? 0.6 : 1,
-        }}
-        transition={{ type: 'spring', stiffness: 120, damping: 20 }}
+        className="fixed pointer-events-none z-[9990] rounded-full"
         style={{
-          width: 40,
-          height: 40,
-          background: 'radial-gradient(circle, #7c3aed44 0%, transparent 70%)',
-          border: '1px solid #7c3aed66',
+          x: blobX,
+          y: blobY,
+          translateX: '-50%',
+          translateY: '-50%',
+          width: hovering ? 120 : 80,
+          height: hovering ? 120 : 80,
+          background: hovering
+            ? 'radial-gradient(circle, #ec489955 0%, transparent 70%)'
+            : 'radial-gradient(circle, #7c3aed33 0%, transparent 70%)',
+          filter: 'blur(20px)',
+          transition: 'width 0.4s ease, height 0.4s ease, background 0.4s ease',
         }}
       />
 
-      {/* Main cursor dot */}
+      {/* Layer 2 — rotating gradient ring */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full"
-        animate={{
-          x: pos.x - 5,
-          y: pos.y - 5,
-          scale: clicking ? 0.5 : hovering ? 0 : 1,
-        }}
-        transition={{ type: 'spring', stiffness: 800, damping: 35 }}
+        className="fixed pointer-events-none z-[9995] rounded-full flex items-center justify-center"
         style={{
-          width: 10,
-          height: 10,
-          background: hovering
-            ? 'transparent'
-            : 'radial-gradient(circle, #06b6d4 0%, #7c3aed 100%)',
-          boxShadow: '0 0 10px #06b6d4',
+          x: ringX,
+          y: ringY,
+          translateX: '-50%',
+          translateY: '-50%',
         }}
+        animate={{
+          width: clicking ? 24 : hovering ? 56 : 36,
+          height: clicking ? 24 : hovering ? 56 : 36,
+          scale: clicking ? 0.85 : 1,
+        }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+      >
+        {/* Rotating conic gradient border */}
+        <motion.div
+          className="absolute inset-0 rounded-full"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+          style={{
+            background: hovering
+              ? 'conic-gradient(from 0deg, #ec4899, #7c3aed, #06b6d4, #ec4899)'
+              : 'conic-gradient(from 0deg, #7c3aed, #06b6d4, #a78bfa, #7c3aed)',
+            padding: 1.5,
+            borderRadius: '50%',
+          }}
+        >
+          <div
+            className="w-full h-full rounded-full"
+            style={{ background: clicking ? 'transparent' : '#0a0a0f' }}
+          />
+        </motion.div>
+
+        {/* Hover label */}
+        {hovering && label && (
+          <motion.span
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative z-10 text-white text-[8px] font-mono font-bold tracking-widest uppercase pointer-events-none"
+          >
+            {label}
+          </motion.span>
+        )}
+
+        {/* Hover arrow */}
+        {hovering && !label && (
+          <motion.span
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative z-10 text-white text-xs pointer-events-none"
+          >
+            →
+          </motion.span>
+        )}
+      </motion.div>
+
+      {/* Layer 3 — precise core dot */}
+      <motion.div
+        className="fixed pointer-events-none z-[9999] rounded-full"
+        style={{
+          x: dotX,
+          y: dotY,
+          translateX: '-50%',
+          translateY: '-50%',
+          background: 'radial-gradient(circle, #ffffff 0%, #06b6d4 60%, #7c3aed 100%)',
+          boxShadow: '0 0 8px #06b6d4, 0 0 16px #7c3aed44',
+        }}
+        animate={{
+          width: hovering ? 0 : clicking ? 14 : 7,
+          height: hovering ? 0 : clicking ? 14 : 7,
+          opacity: hovering ? 0 : 1,
+        }}
+        transition={{ type: 'spring', stiffness: 600, damping: 30 }}
       />
     </>
   )

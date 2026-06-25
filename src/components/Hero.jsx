@@ -1,6 +1,7 @@
 import { useEffect, useState, Suspense, lazy } from 'react'
 import { motion } from 'framer-motion'
 import { FiArrowDown, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
+import GlitchText from './GlitchText'
 
 const TechCube = lazy(() => import('./TechCube'))
 
@@ -81,9 +82,10 @@ export default function Hero() {
 
           <motion.h1 variants={item} className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight">
             <span className="text-white">Hi, I'm </span>
-            <span className="glow-text bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              Sultan
-            </span>
+            <GlitchText
+              text="Sultan"
+              className="glow-text bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent cursor-pointer"
+            />
             <br />
             <span className="text-white">Mohyuddin</span>
           </motion.h1>
